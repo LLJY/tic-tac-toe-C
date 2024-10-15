@@ -1,0 +1,64 @@
+project('ttt-basic', 'c')
+
+# Source files
+src_files = files(
+    'src/util.c',
+    'src/main.c',
+    'src/tui.c',
+    'src/game.c',
+    'src/linked_list.c',
+    'src/minimax.c'
+    # Add any other specific source files here if needed
+)
+
+# Include directories
+incdir = include_directories('include')
+
+
+# Optimization flags
+optimization_flags = [
+  '-O3',                # Optimize for speed
+  '-march=native',      # Optimize for the current CPU architecture
+  '-flto',              # Enable link-time optimization
+  '-lm',           
+  '-Wall'               # Enable all warnings
+]
+
+# Executable
+executable('ttt-basic', 
+           sources: src_files,  # List all source files here
+           include_directories: incdir,
+           c_args: optimization_flags
+)
+
+# Example for adding more source files in the future:
+# Just add the new source file to the 'sources' list
+# e.g., if you add src/utils.c:
+# executable('myproject', 
+#            sources: [main_c, gui_c, 'src/utils.c'], 
+#            include_directories: incdir
+# )
+
+# Example for adding a subdirectory with source files:
+#   - Create a new subdirectory, e.g., 'src/network'
+#   - Add source files to the new subdirectory, e.g., 'src/network/client.c'
+#   - In meson.build:
+#     network_sources = files(
+#       'src/network/client.c',
+#       # ... more network source files
+#     )
+#     executable('myproject', 
+#                sources: [main_c, gui_c, network_sources], 
+#                include_directories: incdir
+#     )
+
+# Example for linking with external libraries:
+#   - Use dependency() to find external libraries
+#   - Add the dependency to the 'link_with' keyword argument
+#   - e.g., to link with GTK4:
+#     gtk4_dep = dependency('gtk4')
+#     executable('myproject', 
+#                sources: [main_c, gui_c], 
+#                include_directories: incdir,
+#                link_with: gtk4_dep
+#     )
