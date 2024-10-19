@@ -42,7 +42,7 @@ bool checkDraw();
 
 /// @brief Checks for win and draw conditions and updates GameState Accordingly
 /// @return 
-bool nextTurn();
+void nextTurn();
 
 /// @brief Checks if there are possible moves left, return true, otherwise, return false
 /// @return 

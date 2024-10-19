@@ -85,6 +85,9 @@ void selectMoveUi(){
             break;
         }
 
+        if(!option1_valid)
+            continue;
+
         switch (rowchar)
         {
         case '1':
