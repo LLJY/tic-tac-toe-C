@@ -17,7 +17,7 @@ int evaluateBoard(int board[3][3]);
 /// @param depth How deep we are in the search
 /// @param isMaximizing True if it's the AI's turn, false if it's the player's turn.
 /// @return The best score the current player can get
-int minimax(int board[3][3], int depth, bool isMaximizing, PlayerType currentPlayer);
+int minimax(int board[3][3], int depth, bool isMaximizing, PlayerType currentPlayer, int maxDepth);
 
 /// @brief Figures out the best move for the AI.
 /// @param board The tic-tac-toe board.

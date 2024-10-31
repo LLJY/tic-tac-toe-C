@@ -1,5 +1,7 @@
 #include <include/minimax.h>
 
+#define MAX_DEPTH 3
+
 int evaluateBoard(int board[3][3]) {
     // Check rows
     for (int i = 0; i < 3; i++) {
@@ -28,7 +30,7 @@ int evaluateBoard(int board[3][3]) {
     return 0; // No winner yet
 }
 
-int minimax(int board[3][3], int depth, bool isMaximizing, PlayerType currentPlayer) {
+int minimax(int board[3][3], int depth, bool isMaximizing, PlayerType currentPlayer, int maxDepth) {
     int score = evaluateBoard(board);
 
     if (score == 10) {
@@ -38,7 +40,7 @@ int minimax(int board[3][3], int depth, bool isMaximizing, PlayerType currentPla
         return score + depth; // Player B (AI) wins (maximize depth)
     }
 
-    if (!isMovesLeft(board)) {
+    if (!isMovesLeft(board) || depth > maxDepth) {
         return 0; // Draw
     }
 
@@ -49,7 +51,7 @@ int minimax(int board[3][3], int depth, bool isMaximizing, PlayerType currentPla
                 if (board[i][j] == 0) {
                     board[i][j] = (currentPlayer == PLAYER_1) ? 1 : 2; // AI's symbol
                     best = max(best, minimax(board, depth + 1, !isMaximizing, 
-                                            (currentPlayer == PLAYER_1) ? AI : PLAYER_1));
+                                            (currentPlayer == PLAYER_1) ? AI : PLAYER_1, MAX_DEPTH));
                     board[i][j] = 0; 
                 }
             }
@@ -62,7 +64,7 @@ int minimax(int board[3][3], int depth, bool isMaximizing, PlayerType currentPla
                 if (board[i][j] == 0) {
                     board[i][j] = (currentPlayer == PLAYER_1) ? 1 : 2; // Human's symbol
                     best = min(best, minimax(board, depth + 1, !isMaximizing, 
-                                            (currentPlayer == PLAYER_1) ? AI : PLAYER_1));
+                                            (currentPlayer == PLAYER_1) ? AI : PLAYER_1, MAX_DEPTH));
                     board[i][j] = 0; 
                 }
             }
@@ -81,7 +83,7 @@ Pair findBestMove(int board[3][3], PlayerType currentPlayer) {
         for (int j = 0; j < 3; j++) {
             if (board[i][j] == 0) {
                 board[i][j] = (currentPlayer == PLAYER_1) ? 2 : 1; // AI's symbol
-                int moveVal = minimax(board, 0, false, (currentPlayer == PLAYER_1) ? AI : PLAYER_1);
+                int moveVal = minimax(board, 0, false, (currentPlayer == PLAYER_1) ? AI : PLAYER_1, MAX_DEPTH);
                 board[i][j] = 0; 
 
                 if (moveVal > bestVal) {
