@@ -83,7 +83,7 @@ bool doMove(int row, int col){
 bool checkDraw(){
     if(unlikely(!isMovesLeft(gameState.board))){
         gameState.isDraw = true;
-        return false;
+        return true;
     }
     // if there's no win, check for draw
     int drawCount = 0;
