@@ -142,13 +142,13 @@ void refreshUi(){
 
             char character;
             switch(gameState.board[j][i]){
-                case 0:
+                case BOARD_EMPTY:
                     character = ' ';
                     break;
-                case 1:
+                case BOARD_CROSS:
                     character = 'X';
                     break;
-                case 2:
+                case BOARD_NOUGHT:
                     character = 'O';
                     break;
                 default:

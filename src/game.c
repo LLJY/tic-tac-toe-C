@@ -6,7 +6,7 @@ void createGameState(PlayerType opponent){
     // Initialize the board to all zeros (empty)
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            gameState.board[i][j] = 0;
+            gameState.board[i][j] = BOARD_EMPTY;
         }
     }
 
@@ -38,20 +38,20 @@ bool doMove(int row, int col){
     int insertChar;
     if(gameState.player1StartFirst){
         if(gameState.turn == AI || gameState.turn == PLAYER_2){
-            insertChar = 2;
+            insertChar = BOARD_NOUGHT;
         }else{
-            insertChar = 1;
+            insertChar = BOARD_CROSS;
         }
     }else{
         if(gameState.turn == AI || gameState.turn == PLAYER_2){
-            insertChar = 1;
+            insertChar = BOARD_CROSS;
         }else{
-            insertChar = 2;
+            insertChar = BOARD_NOUGHT;
         }
     }
 
     // if the move is illegal, and attempts to replace an existing move, disallow it.
-    if(gameState.board[row][col] != 0)
+    if(gameState.board[row][col] != BOARD_EMPTY)
         return false;
 
     gameState.board[row][col] = insertChar;
@@ -109,9 +109,9 @@ bool checkDraw(){
         c = gameState.board[i][2];
         t[0] = a; t[1] = b; t[2] = c;
         for(int j = 0; j < 3; j++){
-            if(t[j] == 1){
+            if(t[j] == BOARD_CROSS){
                 numO++;
-            }else if(t[j] == 2){
+            }else if(t[j] == BOARD_NOUGHT){
                 numX++;
             }
         }
@@ -128,9 +128,9 @@ bool checkDraw(){
     numO = 0;
     t[0] = a; t[1] = b; t[2] = c;
     for(int j = 0; j < 3; j++){
-        if(t[j] == 1){
+        if(t[j] == BOARD_CROSS){
             numO++;
-        }else if(t[j] == 2){
+        }else if(t[j] == BOARD_NOUGHT){
             numX++;
         }
     }
@@ -146,9 +146,9 @@ bool checkDraw(){
     numO = 0;
     t[0] = a; t[1] = b; t[2] = c;
     for(int j = 0; j < 3; j++){
-        if(t[j] == 1){
+        if(t[j] == BOARD_CROSS){
             numO++;
-        }else if(t[j] == 2){
+        }else if(t[j] == BOARD_NOUGHT){
             numX++;
         }
     }
@@ -164,9 +164,9 @@ bool checkDraw(){
         c = gameState.board[2][i];
         t[0] = a; t[1] = b; t[2] = c;
         for(int j = 0; j < 3; j++){
-            if(t[j] == 1){
+            if(t[j] == BOARD_CROSS){
                 numO++;
-            }else if(t[j] == 2){
+            }else if(t[j] == BOARD_NOUGHT){
                 numX++;
             }
         }
@@ -223,7 +223,7 @@ void nextTurn(){
 bool isMovesLeft(int board[3][3]) {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            if (board[i][j] == 0) {
+            if (board[i][j] == BOARD_EMPTY) {
                 return true;
             }
         }

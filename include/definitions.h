@@ -29,4 +29,9 @@ typedef enum PlayerType{
     AI = -1,
     UNASSIGNED = -99
 }PlayerType;
+
+#define BOARD_EMPTY 0
+#define BOARD_CROSS 1
+#define BOARD_NOUGHT 2
+
 #endif
