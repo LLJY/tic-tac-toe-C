@@ -51,6 +51,8 @@ bool isMovesLeft();
 
 void endGame();
 
+/// @brief Traverses backwards in the linked list, in order to undo a previous turn. Resets gameState automatically and prevents repeated turns.
 void undo();
 
+/// @brief Traverses forwards in the linked list, in order to redo a previous turn. Resets gameState automatically and prevents repeated turns.
 void redo();

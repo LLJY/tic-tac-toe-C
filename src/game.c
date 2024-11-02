@@ -64,7 +64,7 @@ bool doMove(int row, int col){
     // make use of branch predictor hints here to increase performance during QL training.
     if(likely(gameState.currentMove != NULL)){ 
         if(unlikely(gameState.currentMove->Next != NULL)){
-            Node* listNode = gameState.currentMove;  //remove the NEXT node until there are no more moves in the linked list so as to not break REDO and UNDO
+            Node* listNode = gameState.currentMove->Next;  //remove the NEXT node until there are no more moves in the linked list so as to not break REDO and UNDO
             while (listNode->Next != NULL)
             {
                 Node* t = listNode->Next;
@@ -235,8 +235,80 @@ bool isMovesLeft(int board[3][3]) {
 }
 
 void undo(){
+    // you can't traverse a linked list without a link or a list, can you?
+    if(gameState.currentMove == NULL)
+        return;
+    
+    // allow the player to traverse back to an empty board, unless AI starts first.
+    if(gameState.currentMove->Prev == NULL && gameState.currentMove->player != AI){
+        // empty the board
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; i < 3; i++)
+            {
+                gameState.board[i][j] = BOARD_EMPTY;
+            }   
+        }
+        return; 
+    }
+
+    if(gameState.currentMove->Prev == NULL)
+        return;
+
+    int row = gameState.currentMove->row;
+    int col = gameState.currentMove->col;
+
+    gameState.board[row][col] = BOARD_EMPTY;
+
+    gameState.currentMove = gameState.currentMove->Prev;
+
+    // flip the turns, always, as it represents the turn of the last move, so naturally next move is other player.
+    gameState.turn = gameState.currentMove->player == gameState.player ? gameState.opponent : gameState.player;
+
+    // never never never allow the player to stop at their own turn, it can lead to extra turns.
+    if(gameState.currentMove->player == PLAYER_1 && gameState.opponent == AI)
+        undo();
 }
 
 void redo(){
-    
+    // you can't traverse a linked list without a link or a list, can you?
+    if(gameState.currentMove == NULL || gameState.currentMove->Next == NULL)
+        return;
+
+    int row, col;
+    if(gameState.board[gameState.currentMove->row][gameState.currentMove->col] != BOARD_EMPTY){
+        // traverse to the next linked list
+        gameState.currentMove = gameState.currentMove->Next;
+
+        // flip the turns, always, as it represents the turn of the last move, so naturally next move is other player.
+        gameState.turn = gameState.currentMove->player == gameState.player ? gameState.opponent : gameState.player;
+        row = gameState.currentMove->row;
+        col = gameState.currentMove->col;
+    }else{
+        // handle special cases when undo was executed all the way until board was empty, so no need to traverse to restore.
+        row = gameState.currentMove->row;
+        col = gameState.currentMove->col;
+    }
+
+    // select the proper character to be inserted
+    int insertChar;
+
+    if(gameState.player1StartFirst){
+        if(gameState.currentMove->player == AI || gameState.currentMove->player == PLAYER_2){
+            insertChar = BOARD_NOUGHT;
+        }else{
+            insertChar = BOARD_CROSS;
+        }
+    }else{
+        if(gameState.currentMove->player == AI || gameState.currentMove->player == PLAYER_2){
+            insertChar = BOARD_CROSS;
+        }else{
+            insertChar = BOARD_NOUGHT;
+        }
+    }
+    gameState.board[row][col] = insertChar;
+
+    //never never never allow the player to stop at their own turn, it can lead to extra turns.
+    if(gameState.currentMove->player == PLAYER_1 && gameState.opponent == AI)
+        redo();
 }
