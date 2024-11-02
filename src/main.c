@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <include/tui.h>
 #include <include/linked_list.h>
-int main(){
-    startGameUi();
+#include <include/gui.h>
+
+int main(int argc, char **argv){
+    // startGameUi();
+    launch_gui(argc, argv);
     return 0;
 }
 

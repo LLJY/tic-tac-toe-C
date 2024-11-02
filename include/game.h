@@ -6,6 +6,7 @@ typedef struct GameState{
     Node* currentMove; // head of the linked list
     bool player1StartFirst; // X will always be drawn first.
     bool isDraw; // handle draw cases
+    bool isStarted; // states if the game has started (for gui)
     PlayerType winner; // winner will be UNNASSIGNED until somebody actually wins.
     PlayerType turn; // 0 for player 1, 1 for player 2, -1 for AI
     PlayerType player; // Player 1 will always be a human player
@@ -50,6 +51,6 @@ bool isMovesLeft();
 
 void endGame();
 
-extern void undo();
+void undo();
 
-extern void redo();
+void redo();

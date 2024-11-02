@@ -1,6 +1,7 @@
 #include <include/minimax.h>
-
-#define MAX_DEPTH 3
+#include <include/definitions.h>
+// set max depth default value here, but it can be modified by tui.c and gui.c
+int MAX_DEPTH = 3;
 
 int evaluateBoard(int board[3][3]) {
     // Check rows

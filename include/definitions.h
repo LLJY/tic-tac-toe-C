@@ -33,5 +33,5 @@ typedef enum PlayerType{
 #define BOARD_EMPTY 0
 #define BOARD_CROSS 1
 #define BOARD_NOUGHT 2
-
+extern int MAX_DEPTH;
 #endif

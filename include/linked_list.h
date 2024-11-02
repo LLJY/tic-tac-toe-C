@@ -1,4 +1,6 @@
 #include <util.h>
+#ifndef LL_H
+#define LL_H
 
 typedef struct Node{
     PlayerType player; // 0 for player 1, 1 for player 2 -1 for AI
@@ -33,3 +35,5 @@ extern void insertNodeTail(Node** tail, Node* node);
 extern void printList(Node* head);
 
 extern void destroyList(Node* head);
+
+#endif

@@ -26,12 +26,15 @@ void createGameState(PlayerType opponent){
     }else{
         gameState.turn = opponent;
     }
+
+    gameState.isStarted = true;
 }
 
 void destroyGameState(){
     if(gameState.currentMove != NULL){
         destroyList(gameState.currentMove);
     }
+    gameState.isStarted = false;
 }
 
 bool doMove(int row, int col){
@@ -231,6 +234,9 @@ bool isMovesLeft(int board[3][3]) {
     return false;
 }
 
-void undo();
+void undo(){
+}
 
-void redo();
+void redo(){
+    
+}

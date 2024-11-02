@@ -7,6 +7,7 @@ src_files = files(
     'src/tui.c',
     'src/game.c',
     'src/linked_list.c',
+    'src/gui.c',
     'src/minimax.c'
     # Add any other specific source files here if needed
 )
@@ -23,12 +24,14 @@ optimization_flags = [
   '-lm',           
   '-Wall'               # Enable all warnings
 ]
+gtkdep = dependency('gtk+-3.0')
 
 # Executable
 executable('ttt-basic', 
            sources: src_files,  # List all source files here
            include_directories: incdir,
-           c_args: optimization_flags
+           c_args: optimization_flags,
+           dependencies : gtkdep
 )
 
 # Example for adding more source files in the future:
