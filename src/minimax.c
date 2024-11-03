@@ -3,7 +3,7 @@
 // set max depth default value here, but it can be modified by tui.c and gui.c
 int MAX_DEPTH = 3;
 
-int evaluateBoard(int board[3][3]) {
+int evaluateBoard(int board[3][3], bool playerStartFirst) {
     // Check rows
     for (int i = 0; i < 3; i++) {
         if (board[i][0] == board[i][1] && board[i][1] == board[i][2]) {
@@ -31,8 +31,8 @@ int evaluateBoard(int board[3][3]) {
     return 0; // No winner yet
 }
 
-int minimax(int board[3][3], int depth, bool isMaximizing, PlayerType currentPlayer, int maxDepth) {
-    int score = evaluateBoard(board);
+int minimax(int board[3][3], int depth, bool isMaximizing, PlayerType currentPlayer, bool playerStartFirst) {
+    int score = evaluateBoard(board, playerStartFirst);
 
     if (score == 10) {
         return score - depth; // Player A wins (minimize depth)
@@ -41,7 +41,7 @@ int minimax(int board[3][3], int depth, bool isMaximizing, PlayerType currentPla
         return score + depth; // Player B (AI) wins (maximize depth)
     }
 
-    if (!isMovesLeft(board) || depth > maxDepth) {
+    if (!isMovesLeft(board) || depth > MAX_DEPTH) {
         return 0; // Draw
     }
 
@@ -74,20 +74,23 @@ int minimax(int board[3][3], int depth, bool isMaximizing, PlayerType currentPla
     }
 }
 
-Pair findBestMove(int board[3][3], PlayerType currentPlayer) {
+Pair findBestMove(int board[3][3], PlayerType currentPlayer, bool playerStartFirst) {
     int bestVal = -1000;
     Pair bestMove;
     bestMove.a = -1;
     bestMove.b = -1;
 
+    bool isMaximizing = !playerStartFirst;
+    bestVal = isMaximizing ? 1000: -1000;
+
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             if (board[i][j] == 0) {
                 board[i][j] = (currentPlayer == PLAYER_1) ? 2 : 1; // AI's symbol
-                int moveVal = minimax(board, 0, false, (currentPlayer == PLAYER_1) ? AI : PLAYER_1, MAX_DEPTH);
+                int moveVal = minimax(board, 0, isMaximizing, (currentPlayer == PLAYER_1) ? AI : PLAYER_1, MAX_DEPTH);
                 board[i][j] = 0; 
 
-                if (moveVal > bestVal) {
+                if ((!isMaximizing && moveVal > bestVal) || (isMaximizing && moveVal < bestVal)) {
                     bestMove.a = i;
                     bestMove.b = j;
                     bestVal = moveVal;
