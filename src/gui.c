@@ -128,9 +128,9 @@ static void button_clicked(GtkWidget *widget, gpointer data) {
     refresh_grid();
     
     // Check for win or draw
-    if (checkWin() || checkDraw()) {
+    if (gameState.winner != UNASSIGNED || gameState.isDraw) {
       handle_win_draw();
-      return;            gtk_combo_box_set_active(GTK_COMBO_BOX(mode_combo_box), 1);
+      return;          
 
     }
 
@@ -342,7 +342,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
 
 void launch_gui(int argc, char **argv) {
     // Create the GTK application
-    GtkApplication *app = gtk_application_new("com.kkxln.tictactoe", G_APPLICATION_FLAGS_NONE);
+    GtkApplication *app = gtk_application_new("com.kkxln.tictactoe", G_APPLICATION_DEFAULT_FLAGS);
     g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
     int status = g_application_run(G_APPLICATION(app), argc, argv);
     g_object_unref(app);
