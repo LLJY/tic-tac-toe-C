@@ -141,13 +141,12 @@ static void button_clicked(GtkWidget *widget, gpointer data) {
 
 void do_ai_move(){
     // AI move
-    if (gameState.opponent == AI && gameState.winner == UNASSIGNED &&
-        !gameState.isDraw) {
+    if (gameState.opponent == AI && gameState.winner == UNASSIGNED && !gameState.isDraw) {
       int t_board[3][3];
 
       // find the best move with a copy of the array, in order to avoid modifying the current array (pass by ref)
       memcpy(t_board, gameState.board, sizeof(gameState.board));
-      Pair pair = findBestMove(t_board, gameState.turn);
+      Pair pair = findBestMove(t_board, gameState.turn, gameState.player1StartFirst);
       doMove(pair.a, pair.b);
       nextTurn();
       gtk_widget_set_sensitive(buttons[pair.a][pair.b], FALSE);

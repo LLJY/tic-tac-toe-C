@@ -200,7 +200,7 @@ void refreshUi(){
     }else if(gameState.turn == AI){
         int t_board[3][3];
         memcpy(t_board, gameState.board, sizeof(gameState.board)); 
-        Pair pair = findBestMove(t_board, gameState.turn);
+        Pair pair = findBestMove(t_board, gameState.turn, gameState.player1StartFirst);
         doMove(pair.a, pair.b);
         nextTurn();
     }
