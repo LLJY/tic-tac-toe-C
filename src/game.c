@@ -14,7 +14,7 @@ void createGameState(PlayerType opponent){
 
     gameState.opponent = opponent;
 
-    gameState.isDraw = true;
+    gameState.isDraw = false;
 
     // since there is no first move, leave the linkedlist and winner as empty
 
