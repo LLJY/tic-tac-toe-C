@@ -26,12 +26,19 @@ optimization_flags = [
 ]
 gtkdep = dependency('gtk+-3.0')
 
+if host_machine.system() == 'windows'
+  subsystem = 'windows' 
+else 
+  subsystem = 'console'
+endif
+
 # Executable
 executable('ttt-basic', 
            sources: src_files,  # List all source files here
            include_directories: incdir,
            c_args: optimization_flags,
-           dependencies : gtkdep
+           dependencies : gtkdep,
+           win_subsystem: subsystem
 )
 
 # Example for adding more source files in the future:
