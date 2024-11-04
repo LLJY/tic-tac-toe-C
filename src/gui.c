@@ -247,28 +247,56 @@ static void restart_button_clicked(GtkWidget *widget, gpointer data) {
     start_button_clicked(widget, data);
 }
 
+// Function to update font size based on button size
+static void update_font_size(GtkWidget *widget, GdkRectangle *allocation, gpointer user_data) {
+  // Get the button's height
+  int button_height = allocation->height;
+
+  // Calculate font size based on button height, half is pretty good and makes it NICE
+  int font_size = button_height / 2;
+
+  // Create a PangoFontDescription
+  PangoFontDescription *font_desc = pango_font_description_new();
+  pango_font_description_set_absolute_size(font_desc, font_size * PANGO_SCALE);
+
+  // Apply the font to the button's label
+  gtk_widget_override_font(widget, font_desc);
+
+  // Free the font description
+  pango_font_description_free(font_desc);
+}
+
 // Function to create the main window
 static void activate(GtkApplication *app, gpointer user_data) {
     // Create the main window
     window = gtk_application_window_new(app);
     gtk_window_set_title(GTK_WINDOW(window), "Tic Tac Toe");
-    gtk_window_set_default_size(GTK_WINDOW(window), 600, 1000);
+    gtk_window_set_default_size(GTK_WINDOW(window), 300, 400);
 
-    // Make the window non-resizable
-    gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
+    // Create a vertical box to hold the grid
+    GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);  // 5 is spacing between elements
+    gtk_container_add(GTK_CONTAINER(window), vbox);
 
     // Create the grid
     grid = gtk_grid_new();
-    gtk_container_add(GTK_CONTAINER(window), grid);
+    gtk_box_pack_start(GTK_BOX(vbox), grid, TRUE, TRUE, 0); 
 
     // Create grid buttons
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             buttons[i][j] = gtk_button_new();
+            // let the button expand with window
+            gtk_widget_set_hexpand(buttons[i][j], TRUE);
+            gtk_widget_set_vexpand(buttons[i][j], TRUE);
+
             gtk_widget_set_size_request(buttons[i][j], 200, 200);
             gtk_grid_attach(GTK_GRID(grid), buttons[i][j], i, j, 1, 1);
+            // connect with the on click function
             g_signal_connect(buttons[i][j], "clicked", G_CALLBACK(button_clicked),
                             GINT_TO_POINTER(i * 3 + j));
+
+            // Connect to "size-allocate" signal to update font size on resize
+            g_signal_connect(buttons[i][j], "size-allocate", G_CALLBACK(update_font_size), buttons[i][j]);
         }
     }
 
