@@ -2,6 +2,9 @@
 #include <math.h>
 #include <util.h>
 
+#ifndef MM_H
+#define MM_H
+
 typedef struct Pair {
     int a;
     int b;
@@ -28,3 +31,5 @@ Pair findBestMove(int board[3][3], PlayerType currentPlayer, bool playerStartFir
 /// @param board The tic-tac-toe board.
 /// @return True if there are empty spots, false otherwise
 bool isMovesLeft(int board[3][3]);
+
+#endif

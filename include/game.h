@@ -1,6 +1,9 @@
 #include <util.h>
 #include <linked_list.h>
 
+#ifndef GAME_H
+#define GAME_H
+
 typedef struct GameState{
     int board[3][3];// 0 for empty, 1 for X (Cross), 2 for nought (O)
     Node* currentMove; // head of the linked list
@@ -56,3 +59,4 @@ void undo();
 
 /// @brief Traverses forwards in the linked list, in order to redo a previous turn. Resets gameState automatically and prevents repeated turns.
 void redo();
+#endif
