@@ -34,6 +34,8 @@ else
   subsystem = 'console'
 endif
 
+out_dir = 'out'
+
 # Executable
 executable('ttt-basic', 
            sources: src_files,  # List all source files here
@@ -42,6 +44,16 @@ executable('ttt-basic',
            dependencies : [gtkdep, tensorflow_dep],
            win_subsystem: subsystem
 )
+
+if host_machine.system() == 'windows'
+  copy = find_program('cp')
+  mkdir = find_program('mkdir')
+  run_command(mkdir, '-p', out_dir)
+  run_command(copy, 'lib/*', out_dir)
+  run_command(copy, 'build/ttt-basic.exe', out_dir)
+  run_command(copy, 'r', 'weights', out_dir)
+endif
+
 
 # Example for adding more source files in the future:
 # Just add the new source file to the 'sources' list
