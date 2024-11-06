@@ -8,7 +8,8 @@ src_files = files(
     'src/game.c',
     'src/linked_list.c',
     'src/gui.c',
-    'src/minimax.c'
+    'src/minimax.c',
+    'src/deep_q.c'
     # Add any other specific source files here if needed
 )
 
@@ -25,6 +26,7 @@ optimization_flags = [
   '-Wall'               # Enable all warnings
 ]
 gtkdep = dependency('gtk+-3.0')
+tensorflow_dep = dependency('tensorflow', required : true)
 
 if host_machine.system() == 'windows'
   subsystem = 'windows' 
@@ -37,7 +39,7 @@ executable('ttt-basic',
            sources: src_files,  # List all source files here
            include_directories: incdir,
            c_args: optimization_flags,
-           dependencies : gtkdep,
+           dependencies : [gtkdep, tensorflow_dep],
            win_subsystem: subsystem
 )
 
