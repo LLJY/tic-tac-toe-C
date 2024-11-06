@@ -130,11 +130,12 @@ def print_board(board):
 def create_model():
     """Creates the TensorFlow Q-learning model."""
     model = Sequential()
-    model.add(Flatten(input_shape=(3, 3)))  # Input shape for the 3x3 board
+    model.add(Flatten(input_shape=(3, 3), name = "input_t"))  # Input shape for the 3x3 board
     model.add(Dense(128, activation='relu'))
     model.add(Dense(64, activation='relu'))
-    model.add(Dense(9, activation='linear'))  # 9 outputs for each possible move
+    model.add(Dense(9, activation='linear', name = "output_t"))  # 9 outputs for each possible move
     model.compile(loss='mse', optimizer='adam')
+    print(model.summary())
     return model
 
 def get_state(board):
@@ -162,7 +163,7 @@ def get_action(model, state, epsilon):
         return np.argmax(q_values[0])
 
 
-def train_q_learning(model, episodes=10000, gamma=0.95, epsilon=1.0, epsilon_decay=0.999):
+def train_q_learning(model, episodes=5000, gamma=0.5, epsilon=1.0, epsilon_decay=0.999):
     """
     Trains the Q-learning agent against a random agent.
 
@@ -222,7 +223,7 @@ def train_q_learning(model, episodes=10000, gamma=0.95, epsilon=1.0, epsilon_dec
             print(f"Episode: {episode + 1}, Epsilon: {epsilon:.4f}")
 
     # Save the trained model weights
-    model.save_weights("tic_tac_toe_q_learning_weights.h5")
+    model.export("weights")
 
 def main_game():
     """Main function to run the tic-tac-toe game."""
