@@ -25,7 +25,8 @@ optimization_flags = [
   '-lm',           
   '-Wall'               # Enable all warnings
 ]
-gtkdep = dependency('gtk+-3.0')
+
+gtkdep = dependency('gtk+-3.0', required : true)
 tensorflow_dep = dependency('tensorflow', required : true)
 
 if host_machine.system() == 'windows'
@@ -33,8 +34,6 @@ if host_machine.system() == 'windows'
 else 
   subsystem = 'console'
 endif
-
-out_dir = 'out'
 
 # Executable
 executable('ttt-basic', 
@@ -44,7 +43,7 @@ executable('ttt-basic',
            dependencies : [gtkdep, tensorflow_dep],
            win_subsystem: subsystem
 )
-
+out_dir = 'out'
 if host_machine.system() == 'windows'
   copy = find_program('cp')
   mkdir = find_program('mkdir')
