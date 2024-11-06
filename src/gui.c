@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <include/definitions.h>
+#include <include/deep_q.h>
 
 // Define the GUI elements
 GtkWidget *window;
@@ -19,6 +20,7 @@ GtkWidget *restart_button;
 GtkWidget *start_button;
 
 PlayerType opponent = AI;
+bool aiIsDeepLearning = false;
 
 // Function to refresh the grid
 static void refresh_grid() {
@@ -146,7 +148,12 @@ void do_ai_move(){
 
       // find the best move with a copy of the array, in order to avoid modifying the current array (pass by ref)
       memcpy(t_board, gameState.board, sizeof(gameState.board));
-      Pair pair = findBestMove(t_board, gameState.turn, gameState.player1StartFirst);
+      Pair pair;
+      if(aiIsDeepLearning){
+        pair = findBestDLMove(t_board, gameState.turn, gameState.player1StartFirst);
+      }else{
+        pair = findBestMove(t_board, gameState.turn, gameState.player1StartFirst);
+      }
       doMove(pair.a, pair.b);
       nextTurn();
       gtk_widget_set_sensitive(buttons[pair.a][pair.b], FALSE);
@@ -170,12 +177,14 @@ static void mode_combo_box_changed(GtkWidget *widget, gpointer data) {
     switch(mode){
         case 0:
             opponent = AI;
+            aiIsDeepLearning = false;
             break;
         case 1:
             opponent = PLAYER_2;
             break;
         case 2:
-            // UNIMPLEMENTED
+            opponent = AI;
+            aiIsDeepLearning = true;
             break;
     }
 

@@ -2,10 +2,15 @@
 #include <include/tui.h>
 #include <include/linked_list.h>
 #include <include/gui.h>
+#include <include/deep_q.h>
 
 int main(int argc, char **argv){
     // startGameUi();
+
+    // initialise tensorflow, so user can quickly load the selected player.
+    init_tensorflow("weights/");
     launch_gui(argc, argv);
+    cleanup_tensorflow();
     return 0;
 }
 
