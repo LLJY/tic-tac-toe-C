@@ -3,6 +3,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.layers import Dense, Flatten
 from tensorflow.keras.models import Sequential 
+from matplotlib import pyplot as plt
 
 # Constants (same as in C code)
 BOARD_EMPTY = 0
@@ -163,7 +164,7 @@ def get_action(model, state, epsilon):
         return np.argmax(q_values[0])
 
 
-def train_q_learning(model, episodes=5000, gamma=0.5, epsilon=1.0, epsilon_decay=0.999):
+def train_q_learning(model, episodes=10000, gamma=0.95, epsilon=1.0, epsilon_decay=0.999):
     """
     Trains the Q-learning agent against a random agent.
 
@@ -180,34 +181,63 @@ def train_q_learning(model, episodes=5000, gamma=0.5, epsilon=1.0, epsilon_decay
     LOSE_REWARD = -100
     DRAW_REWARD = 50 # tic tac toe is highly likely to draw, so use a higher draw reward
 
+    wins = 0
+    losses = 0
+    draws = 0
+    win_history = []  # List to store win counts at intervals
+    loss_history = []  # List to store loss counts at intervals
+    draw_history = []  # List to store draw counts at intervals
+
     for episode in range(episodes):
+        print(f"Episode {episode} of episodes {episodes}")
         reward = 0
         game_state = GameState()
         state = get_state(game_state.board)
         done = False
         while not done:
             if game_state.turn == AI:  # Q-learning agent's turn
-                action = get_action(model, state, epsilon)
-                row = action // 3
-                col = action % 3
-                valid_move = do_move(game_state.board, row, col, AI)
+                # action = get_action(model, state, epsilon)
+                # row = action // 3
+                # col = action % 3
+                # valid_move = do_move(game_state.board, row, col, AI)
+                valid_move = False
+                while(not valid_move):
+                    reward += INVALID_MOVE_REWARD
+                    action = get_action(model, state, epsilon)
+                    row = action // 3
+                    col = action % 3
+                    next_state = get_state(game_state.board)
+                    valid_move = do_move(game_state.board, row, col, AI)
+
+                    # update the model to teach it valid or invalid moves
+                    reward += VALID_MOVE_REWARD if valid_move else INVALID_MOVE_REWARD
+                    target = reward + gamma * np.max(model.predict(next_state)[0]) * (not done)
+                    target_f = model.predict(state)
+                    target_f[0][action] = target
+                    model.fit(state, target_f, epochs=1, verbose=0)
+                reward = 0
             else:  # Random agent's turn
                 row, col = get_random_move(game_state.board)
                 valid_move = do_move(game_state.board, row, col, PLAYER_1) 
-
             next_state = get_state(game_state.board)
-            reward += VALID_MOVE_REWARD if valid_move else INVALID_MOVE_REWARD  # Reward for valid move, penalty for invalid
+              # Reward for valid move, penalty for invalid
             next_turn(game_state)
 
             if game_state.winner != UNASSIGNED:
                 done = True
                 if game_state.winner == AI:
+                    print("\033[92mAI Won this round")
                     reward += WIN_REWARD  # Reward for winning
+                    wins += 1
                 else:
+                    print("\033[91mAI LOST this round")
                     reward += LOSE_REWARD  # Penalty for losing
+                    losses += 1
             elif game_state.isDraw:
+                print("\033[96mAI Drew this round")
                 done = True
                 reward += DRAW_REWARD  # Small reward for draw
+                draws += 1
 
             if game_state.turn == AI:  # Only update Q-learning agent
                 # Q-learning update
@@ -221,9 +251,27 @@ def train_q_learning(model, episodes=5000, gamma=0.5, epsilon=1.0, epsilon_decay
         epsilon *= epsilon_decay
         if (episode + 1) % 1000 == 0:
             print(f"Episode: {episode + 1}, Epsilon: {epsilon:.4f}")
+            # Append the current win/loss/draw counts to the history lists
+            win_history.append(wins)
+            loss_history.append(losses)
+            draw_history.append(draws)
+            wins = 0
+            losses = 0
+            draws = 0
 
     # Save the trained model weights
     model.export("weights")
+
+    # Plotting the results
+    plt.figure(figsize=(10, 5))
+    plt.plot(win_history, label='Wins')
+    plt.plot(loss_history, label='Losses')
+    plt.plot(draw_history, label='Draws')
+    plt.title('Q-learning Training Results')
+    plt.xlabel('Episodes (in thousands)')
+    plt.ylabel('Number of Wins/Losses/Draws')
+    plt.legend()
+    plt.show()
 
 def main_game():
     """Main function to run the tic-tac-toe game."""
