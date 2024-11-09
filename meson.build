@@ -51,7 +51,7 @@ mkdir = find_program('mkdir')
 run_command(mkdir, '-p', out_dir)
 run_command(copy, 'build/ttt-basic.exe', out_dir)
 run_command(copy, 'r', 'weights', out_dir)
-run_command(copy, 'r', 'sounds', out_dir)
+run_command(copy, 'sounds/*', out_dir)
 if host_machine.system() == 'windows'
   run_command(copy, 'lib/*', out_dir)
 endif
