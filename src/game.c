@@ -1,3 +1,4 @@
+#include <include/util.h>
 #include <include/game.h>
 
 GameState gameState;
