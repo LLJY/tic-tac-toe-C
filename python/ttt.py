@@ -1,7 +1,7 @@
 import random
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.layers import Dense, Flatten, Dropout
 from tensorflow.keras.models import Sequential 
 from matplotlib import pyplot as plt
 
@@ -135,15 +135,28 @@ def create_model():
     model.add(Dense(128, activation='relu'))
     model.add(Dense(64, activation='relu'))
     model.add(Dense(9, activation='linear', name = "output_t"))  # 9 outputs for each possible move
-    model.compile(loss='mse', optimizer='adam')
+    opt = tf.keras.optimizers.Adam(learning_rate=0.0001)
+    model.compile(loss='mse', optimizer=opt)
     print(model.summary())
     return model
 
-def get_state(board):
-    """Converts the board to a NumPy array suitable for the model."""
-    return np.array(board).reshape(1, 3, 3)
+def get_state(board, playerStartFirst):
+    """
+    Converts the board to a NumPy array suitable for the model, 
+    where 1 represents the opponent and 2 represents the AI.
+    """
+    new_board = np.array(board)
 
-def get_action(model, state, epsilon):
+    # Swap the representation if the player starts first
+    if playerStartFirst:
+        new_board = np.where(new_board == 1, 3, new_board)  # Temporary value to avoid conflicts
+        new_board = np.where(new_board == 2, 1, new_board)
+        new_board = np.where(new_board == 3, 2, new_board)
+
+    # Convert to a format suitable for the model
+    return new_board.reshape(1, 3, 3)
+
+def get_action(model, state, epsilon, board):
     """
     Chooses an action using an epsilon-greedy strategy.
 
@@ -156,15 +169,18 @@ def get_action(model, state, epsilon):
         int: The chosen action (0-8 representing the board cells).
     """
     if random.random() < epsilon:
-        # Explore: choose a random action
-        return random.randint(0, 8)
+        # Explore: choose a random valid move
+        print("\033[93mEpsilon value")
+        empty_cells = [(i, j) for i in range(3) for j in range(3) if board[i][j] == BOARD_EMPTY]
+        row, col = random.choice(empty_cells)
+        return row * 3 + col  # Convert to action index
     else:
         # Exploit: choose the action with the highest predicted Q-value
         q_values = model.predict(state)
         return np.argmax(q_values[0])
 
 
-def train_q_learning(model, episodes=10000, gamma=0.95, epsilon=1.0, epsilon_decay=0.999):
+def train_q_learning(model, episodes=3000, gamma=0.8, epsilon=1.0, epsilon_decay=0.999):
     """
     Trains the Q-learning agent against a random agent.
 
@@ -175,8 +191,8 @@ def train_q_learning(model, episodes=10000, gamma=0.95, epsilon=1.0, epsilon_dec
         epsilon: The initial exploration rate.
         epsilon_decay: The rate at which epsilon decays.
     """
-    VALID_MOVE_REWARD = 1
-    INVALID_MOVE_REWARD = -20
+    VALID_MOVE_REWARD = 20
+    INVALID_MOVE_REWARD = -100
     WIN_REWARD = 100
     LOSE_REWARD = -100
     DRAW_REWARD = 50 # tic tac toe is highly likely to draw, so use a higher draw reward
@@ -192,7 +208,7 @@ def train_q_learning(model, episodes=10000, gamma=0.95, epsilon=1.0, epsilon_dec
         print(f"Episode {episode} of episodes {episodes}")
         reward = 0
         game_state = GameState()
-        state = get_state(game_state.board)
+        state = get_state(game_state.board, game_state.player1StartFirst)
         done = False
         while not done:
             if game_state.turn == AI:  # Q-learning agent's turn
@@ -202,24 +218,25 @@ def train_q_learning(model, episodes=10000, gamma=0.95, epsilon=1.0, epsilon_dec
                 # valid_move = do_move(game_state.board, row, col, AI)
                 valid_move = False
                 while(not valid_move):
-                    reward += INVALID_MOVE_REWARD
-                    action = get_action(model, state, epsilon)
+                    action = get_action(model, state, epsilon, game_state.board)
                     row = action // 3
                     col = action % 3
-                    next_state = get_state(game_state.board)
+                    next_state = get_state(game_state.board, game_state.player1StartFirst)
                     valid_move = do_move(game_state.board, row, col, AI)
-
+                    if(not valid_move):
+                        print("invalid move")
                     # update the model to teach it valid or invalid moves
                     reward += VALID_MOVE_REWARD if valid_move else INVALID_MOVE_REWARD
-                    target = reward + gamma * np.max(model.predict(next_state)[0]) * (not done)
+                    target = reward + gamma * np.max(model.predict(next_state)[0])
+                    print(f"{target}           {reward}")
                     target_f = model.predict(state)
-                    target_f[0][action] = target
+                    target_f[0][action] = reward
                     model.fit(state, target_f, epochs=1, verbose=0)
-                reward = 0
+                    reward = 0
             else:  # Random agent's turn
                 row, col = get_random_move(game_state.board)
                 valid_move = do_move(game_state.board, row, col, PLAYER_1) 
-            next_state = get_state(game_state.board)
+            next_state = get_state(game_state.board, game_state.player1StartFirst)
               # Reward for valid move, penalty for invalid
             next_turn(game_state)
 
@@ -238,10 +255,21 @@ def train_q_learning(model, episodes=10000, gamma=0.95, epsilon=1.0, epsilon_dec
                 done = True
                 reward += DRAW_REWARD  # Small reward for draw
                 draws += 1
+            else:
+                # Reward shaping for creating a line of two
+                for i in range(3):  # Check rows and columns
+                    if (game_state.board[i][0] == game_state.board[i][1] == AI and game_state.board[i][2] == BOARD_EMPTY) or \
+                    (game_state.board[i][0] == game_state.board[i][2] == AI and game_state.board[i][1] == BOARD_EMPTY) or \
+                    (game_state.board[i][1] == game_state.board[i][2] == AI and game_state.board[i][0] == BOARD_EMPTY) or \
+                    (game_state.board[0][i] == game_state.board[1][i] == AI and game_state.board[2][i] == BOARD_EMPTY) or \
+                    (game_state.board[0][i] == game_state.board[2][i] == AI and game_state.board[1][i] == BOARD_EMPTY) or \
+                    (game_state.board[1][i] == game_state.board[2][i] == AI and game_state.board[0][i] == BOARD_EMPTY):
+                        reward += 20
+            
 
             if game_state.turn == AI:  # Only update Q-learning agent
                 # Q-learning update
-                target = reward + gamma * np.max(model.predict(next_state)[0]) * (not done)
+                target = reward + gamma * np.max(model.predict(next_state)[0])
                 target_f = model.predict(state)
                 target_f[0][action] = target
                 model.fit(state, target_f, epochs=1, verbose=0)
@@ -251,6 +279,7 @@ def train_q_learning(model, episodes=10000, gamma=0.95, epsilon=1.0, epsilon_dec
         epsilon *= epsilon_decay
         if (episode + 1) % 1000 == 0:
             print(f"Episode: {episode + 1}, Epsilon: {epsilon:.4f}")
+        if (episode + 1) % 5 == 0:
             # Append the current win/loss/draw counts to the history lists
             win_history.append(wins)
             loss_history.append(losses)
@@ -272,6 +301,15 @@ def train_q_learning(model, episodes=10000, gamma=0.95, epsilon=1.0, epsilon_dec
     plt.ylabel('Number of Wins/Losses/Draws')
     plt.legend()
     plt.show()
+    plt.savefig('a.png')
+    # Create best-fit line graph
+    # plt.figure()
+    # plt.plot(x, best_fit_line, linestyle='-', color='red', label='Best Fit Line')
+    # plt.xlabel('X-axis')
+    # plt.ylabel('Y-axis')
+    # plt.title('Best Fit Line')
+    # plt.legend()
+    # plt.savefig('best_fit_line.png')
 
 def main_game():
     """Main function to run the tic-tac-toe game."""

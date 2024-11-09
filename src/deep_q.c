@@ -139,6 +139,13 @@ Pair findBestDLMove(int board[3][3], PlayerType currentPlayer, bool playerStartF
     {
         for (int j = 0; j < 3; ++j)
         {
+            if(playerStartFirst){
+                if(board[i][j] == 1){
+                    board[i][j] == 2;
+                }else if(board[i][j] == 2){
+                    board[i][j] == 1;
+                }
+            }
             data[i * 3 + j] = (float)board[i][j]; // Cast int to float
         }
     }
@@ -198,25 +205,32 @@ Pair findBestDLMove(int board[3][3], PlayerType currentPlayer, bool playerStartF
     float *q_values = (float *)TF_TensorData(output_tensor);
 
     // Determine the best move based on Q-values
+    Pair bestMove;
+
+
     int best_move = -1;
     float best_q_value = -1000.0f; // initialize with a very low value, so we can compare it against the tensor and pick the best
     for (int i = 0; i < 9; ++i)
     {
         if (q_values[i] > best_q_value && data[i] == 0)
         {
-            best_q_value = q_values[i];
-            best_move = i;
+            // ensure that the move is valid
+            if(board[i / 3][i % 3] == 0){
+                best_q_value = q_values[i];
+                best_move = i;
+            }
         }
     }
+    
+    // Convert best_move to row and col
+    bestMove.a = best_move / 3;
+    bestMove.b = best_move % 3;
+
+    
 
     // Clean up
     TF_DeleteTensor(input_tensor);
     TF_DeleteTensor(output_tensor);
-
-    // Convert best_move to row and col
-    Pair bestMove;
-    bestMove.a = best_move / 3;
-    bestMove.b = best_move % 3;
     return bestMove;
 }
 
