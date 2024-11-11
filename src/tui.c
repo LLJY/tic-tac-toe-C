@@ -203,6 +203,8 @@ void refreshUi(){
             println("----- NEXT TURN OPTIONS -----");
             println("1) Execute Turn");
             println("2) Surrender");
+            println("3) Undo Previous Turn");
+            println("4) Redo Previous Turn");
             println("-----------------------------");
             scanf("%d", &menu_option1);
             switch (menu_option1)
@@ -217,7 +219,16 @@ void refreshUi(){
                 option1_valid = true;
                 endGameUi();
                 break;
-            
+            case 3:
+                undo();
+                option1_valid = true;
+                refreshUi();
+                break;
+            case 4:
+                redo();
+                option1_valid = true;
+                refreshUi();
+                break;
             default:
                 option1_valid = false;
                 break;
