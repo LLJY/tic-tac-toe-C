@@ -3,9 +3,11 @@
 #include <include/linked_list.h>
 
 int main(int argc, char **argv){
-
-    // initialise tensorflow, so user can quickly load the selected player.
     startGameUi();
+
+    //testLinkedList() //uncomment this line and comment out startGameUi if intending to stress test linked list
+
+    // don't worry there are no memory leaks in the linked list ;)
     return 0;
 }
 
