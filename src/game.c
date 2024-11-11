@@ -242,7 +242,10 @@ void undo(){
     if(gameState.currentMove == NULL)
         return;
     // allow the player to traverse back to an empty board, unless AI starts first.
-    if(gameState.currentMove->Prev == NULL && gameState.currentMove->player != AI && gameState.player1StartFirst){
+    if(gameState.currentMove->Prev == NULL 
+    && gameState.currentMove->player != AI 
+    && gameState.player1StartFirst
+    && gameState.opponent == AI){
         // empty the board
         for (int i = 0; i < 3; i++)
         {
@@ -251,8 +254,24 @@ void undo(){
                 gameState.board[i][j] = BOARD_EMPTY;
             }   
         }
+
         gameState.turn = gameState.player;
         return; 
+        // add additional logic for when game is 1v1
+    }else if(gameState.currentMove->Prev == NULL && gameState.opponent == PLAYER_2){
+        // empty the board
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; i < 3; i++)
+            {
+                gameState.board[i][j] = BOARD_EMPTY;
+            }   
+        }
+
+        if(gameState.player1StartFirst)
+            gameState.turn = PLAYER_1;
+        else
+            gameState.turn = PLAYER_2;
     }
 
     if(gameState.currentMove->Prev == NULL)
