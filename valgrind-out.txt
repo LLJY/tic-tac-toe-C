@@ -1,0 +1,71 @@
+==563556== Memcheck, a memory error detector
+==563556== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==563556== Using Valgrind-3.16.1-36d6727e1d-20200622X and LibVEX; rerun with -h for copyright info
+==563556== Command: ./ttt-basic
+==563556== Parent PID: 552920
+==563556== 
+--563556-- 
+--563556-- Valgrind options:
+--563556--    --leak-check=full
+--563556--    --show-leak-kinds=all
+--563556--    --track-origins=yes
+--563556--    --verbose
+--563556--    --log-file=valgrind-out.txt
+--563556-- Contents of /proc/version:
+--563556--   Linux version 6.1.21-v8+ (dom@buildbot) (aarch64-linux-gnu-gcc-8 (Ubuntu/Linaro 8.4.0-3ubuntu1) 8.4.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #1642 SMP PREEMPT Mon Apr  3 17:24:16 BST 2023
+--563556-- 
+--563556-- Arch and hwcaps: ARM64, LittleEndian, baseline
+--563556-- Page sizes: currently 4096, max supported 65536
+--563556-- Valgrind library directory: /usr/lib/aarch64-linux-gnu/valgrind
+--563556-- Reading syms from /home/lucas/Projects/SIT/Y1T1/tic-tac-toe-C/build/ttt-basic
+--563556-- Warning: cross-CU LIMITATION: some inlined fn names
+--563556-- might be shown as UnknownInlinedFun
+--563556-- Reading syms from /usr/lib/aarch64-linux-gnu/ld-2.31.so
+--563556--   Considering /usr/lib/debug/.build-id/89/294a1b675a06c17cd91b6281d1ef5643d0daa7.debug ..
+--563556--   .. build-id is valid
+--563556-- Reading syms from /usr/lib/aarch64-linux-gnu/valgrind/memcheck-arm64-linux
+--563556--   Considering /usr/lib/debug/.build-id/55/2b6c08fce7efb631c7becbfdbaf99ee9bb045e.debug ..
+--563556--   .. build-id is valid
+--563556--    object doesn't have a dynamic symbol table
+--563556-- Scheduler: using generic scheduler lock implementation.
+--563556-- Reading suppressions file: /usr/lib/aarch64-linux-gnu/valgrind/default.supp
+==563556== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-563556-by-lucas-on-???
+==563556== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-563556-by-lucas-on-???
+==563556== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-563556-by-lucas-on-???
+==563556== 
+==563556== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==563556== don't want to do, unless you know exactly what you're doing,
+==563556== or are doing some strange experiment):
+==563556==   /usr/bin/vgdb --pid=563556 ...command...
+==563556== 
+==563556== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==563556==   /path/to/gdb ./ttt-basic
+==563556== and then give GDB the following command
+==563556==   target remote | /usr/bin/vgdb --pid=563556
+==563556== --pid is optional if only one valgrind process is running
+==563556== 
+--563556-- REDIR: 0x4019980 (ld-linux-aarch64.so.1:strlen) redirected to 0x580c8258 (vgPlain_arm64_linux_REDIR_FOR_strlen)
+--563556-- REDIR: 0x4018a00 (ld-linux-aarch64.so.1:strcmp) redirected to 0x580c82ac (vgPlain_arm64_linux_REDIR_FOR_strcmp)
+--563556-- REDIR: 0x4018900 (ld-linux-aarch64.so.1:index) redirected to 0x580c8280 (vgPlain_arm64_linux_REDIR_FOR_index)
+--563556-- Reading syms from /usr/lib/aarch64-linux-gnu/valgrind/vgpreload_core-arm64-linux.so
+--563556--   Considering /usr/lib/debug/.build-id/86/2ef07f508ed868e9ce3095734b2ce9a19f61ad.debug ..
+--563556--   .. build-id is valid
+--563556-- Reading syms from /usr/lib/aarch64-linux-gnu/valgrind/vgpreload_memcheck-arm64-linux.so
+--563556--   Considering /usr/lib/debug/.build-id/5b/38e3948c6b3565f564e907d1c4867e69b35835.debug ..
+--563556--   .. build-id is valid
+--563556-- Reading syms from /usr/lib/aarch64-linux-gnu/libc-2.31.so
+--563556--   Considering /usr/lib/debug/.build-id/4e/b7fbd6cc533ef8e8c42bbb4ff91e908c6e58c8.debug ..
+--563556--   .. build-id is valid
+--563556-- REDIR: 0x48f73b0 (libc.so.6:memchr) redirected to 0x48346c8 (_vgnU_ifunc_wrapper)
+--563556-- REDIR: 0x48f6180 (libc.so.6:strlen) redirected to 0x48346c8 (_vgnU_ifunc_wrapper)
+--563556-- REDIR: 0x48f6600 (libc.so.6:rindex) redirected to 0x484cd00 (rindex)
+--563556-- REDIR: 0x48f1a60 (libc.so.6:malloc) redirected to 0x4849dd8 (malloc)
+--563556-- REDIR: 0x48f2030 (libc.so.6:free) redirected to 0x484af70 (free)
+==563556== 
+==563556== HEAP SUMMARY:
+==563556==     in use at exit: 0 bytes in 0 blocks
+==563556==   total heap usage: 100,001 allocs, 100,001 frees, 3,200,032 bytes allocated
+==563556== 
+==563556== All heap blocks were freed -- no leaks are possible
+==563556== 
+==563556== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

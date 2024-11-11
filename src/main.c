@@ -7,7 +7,7 @@ int main(int argc, char **argv){
 
     //testLinkedList() //uncomment this line and comment out startGameUi if intending to stress test linked list
 
-    // don't worry there are no memory leaks in the linked list ;)
+    // don't worry there are no memory leaks in the linked list ;) see valgrind report in root dir ;)
     return 0;
 }
 
