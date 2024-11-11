@@ -8,7 +8,6 @@ src_files = files(
     'src/game.c',
     'src/linked_list.c',
     'src/minimax.c',
-    'src/deep_q.c',
     # Add any other specific source files here if needed
 )
 
@@ -24,14 +23,13 @@ optimization_flags = [
   '-Wall'               # Enable all warnings
 ]
 
-tensorflow_dep = dependency('tensorflow', required : true)
 
 # Executable
 executable('ttt-basic', 
            sources: src_files,  # List all source files here
            include_directories: incdir,
            c_args: optimization_flags,
-           dependencies : [tensorflow_dep],
+           dependencies : [],
 )
 
 
