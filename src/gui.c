@@ -31,7 +31,7 @@ static void refresh_grid()
     {
         for (int j = 0; j < 3; j++)
         {
-            gtk_widget_set_sensitive(buttons[i][j], gameState.board[i][j] == 0 && gameState.isStarted == TRUE);
+            gtk_widget_set_sensitive(buttons[i][j], gameState.board[i][j] == 0 && gameState.isStarted == TRUE && gameState.winner == UNASSIGNED);
             if (gameState.board[i][j] == BOARD_CROSS)
             {
                 gtk_button_set_label(GTK_BUTTON(buttons[i][j]), "X");
@@ -271,14 +271,23 @@ static void surrender_button_clicked(GtkWidget *widget, gpointer data)
         (gameState.turn == gameState.player) ? gameState.opponent : gameState.player;
 
     // Show the result
-    GtkWidget *dialog = gtk_message_dialog_new(
-        GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO,
-        GTK_BUTTONS_CLOSE, "Game Over! %s won!",
-        gameState.winner == PLAYER_1 ? "Player 1" : "Player 2");
+    GtkWidget *dialog;
+    if(gameState.opponent != AI){
+        dialog = gtk_message_dialog_new(
+            GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO,
+            GTK_BUTTONS_CLOSE, "Game Over! %s won!",
+            gameState.winner == PLAYER_1 ? "Player 1" : "Player 2");
+    }else{
+        dialog = gtk_message_dialog_new(
+            GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO,
+            GTK_BUTTONS_CLOSE, "Game Over! %s won!",
+            gameState.winner == PLAYER_1 ? "You" : "AI");
+    }
     gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);
 
     refresh_buttons();
+    refresh_grid();
 }
 
 // Function to handle start button clicks

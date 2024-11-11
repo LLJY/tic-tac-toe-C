@@ -49,11 +49,13 @@ out_dir = 'out'
 copy = find_program('cp')
 mkdir = find_program('mkdir')
 run_command(mkdir, '-p', out_dir)
-run_command(copy, 'build/ttt-basic.exe', out_dir)
 run_command(copy, 'r', 'weights', out_dir)
 run_command(copy, 'sounds/*', out_dir)
 if host_machine.system() == 'windows'
   run_command(copy, 'lib/*', out_dir)
+  run_command(copy, 'build/ttt-basic.exe', out_dir)
+else
+  run_command(copy, 'build/ttt-basic', out_dir)
 endif
 
 
