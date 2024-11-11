@@ -1,18 +1,13 @@
 #include <stdio.h>
 #include <include/tui.h>
 #include <include/linked_list.h>
-#include <include/gui.h>
 #include <include/deep_q.h>
-#include <include/sound.h>
 
 int main(int argc, char **argv){
-    // startGameUi();
 
     // initialise tensorflow, so user can quickly load the selected player.
-    init_audio();
     init_tensorflow("weights/");
-    play_sound(BGM_SND, true);
-    launch_gui(argc, argv);
+    startGameUi();
     cleanup_tensorflow();
     return 0;
 }
