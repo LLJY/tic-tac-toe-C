@@ -6,8 +6,8 @@ src_files = files(
     'src/main.c',
     'src/tui.c',
     'src/game.c',
-    'src/linked_list.c',
     'src/minimax.c',
+    'src/linked_list_man.S',
     # Add any other specific source files here if needed
 )
 
