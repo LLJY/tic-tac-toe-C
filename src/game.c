@@ -241,9 +241,8 @@ void undo(){
     // you can't traverse a linked list without a link or a list, can you?
     if(gameState.currentMove == NULL)
         return;
-    
     // allow the player to traverse back to an empty board, unless AI starts first.
-    if(gameState.currentMove->Prev == NULL && gameState.currentMove->player != AI){
+    if(gameState.currentMove->Prev == NULL && gameState.currentMove->player != AI && gameState.player1StartFirst){
         // empty the board
         for (int i = 0; i < 3; i++)
         {
@@ -252,6 +251,7 @@ void undo(){
                 gameState.board[i][j] = BOARD_EMPTY;
             }   
         }
+        gameState.turn = gameState.player;
         return; 
     }
 
