@@ -2,9 +2,7 @@
 #include <include/minimax.h>
 #include <include/game.h>
 #include <string.h>
-#include <include/deep_q.h>
 
-bool aiDeepLearning = false;
 void endGameUi(){
     if(gameState.isDraw){
         println("Game Over! Draw!");
@@ -28,7 +26,7 @@ PlayerType selectOpponentTypeUi(){
         println("Select Opponnent:");
         println("1. Multiplayer");
         println("2. AI Player (Minimax)");
-        println("3. Deep-Q Learning AI Player");
+        println("3. AI Player (Actual AI)");
         scanf("%d", &input);
 
         switch(input){
@@ -39,34 +37,10 @@ PlayerType selectOpponentTypeUi(){
             case 2:
                 valid_input = true;
                 opponent = AI;
-                aiDeepLearning = false;
                 break;
             case 3:
                 valid_input = true;
                 opponent = AI;
-                aiDeepLearning = true;
-                break;
-            default:
-                valid_input = false;
-                break;
-        }
-    }
-    clearScreen();
-    valid_input = false;
-    // ask for difficulty only when playing minimax
-    while(!valid_input && opponent == AI && !aiDeepLearning){
-        println("Select Difficulty:");
-        println("1. Easy");
-        println("2. Impossible");
-        scanf("%d", &input);
-        switch(input){
-            case 1:
-                valid_input = true;
-                MAX_DEPTH = 2;
-                break;
-            case 2:
-                valid_input = true;
-                MAX_DEPTH = 9;
                 break;
             default:
                 valid_input = false;
@@ -236,13 +210,8 @@ void refreshUi(){
         }
     }else if(gameState.turn == AI){
         int t_board[3][3];
-        memcpy(t_board, gameState.board, sizeof(gameState.board));
-        Pair pair; 
-        if(aiDeepLearning){
-            pair = findBestDLMove(t_board, gameState.turn, gameState.player1StartFirst);
-        }else{
-            pair = findBestMove(t_board, gameState.turn, gameState.player1StartFirst);
-        }
+        memcpy(t_board, gameState.board, sizeof(gameState.board)); 
+        Pair pair = findBestMove(t_board, gameState.turn, gameState.player1StartFirst);
         doMove(pair.a, pair.b);
         nextTurn();
     }
