@@ -172,7 +172,7 @@ destroyList:
     ldr  x19, [sp, 16]  //,
     ldp  x29, x30, [sp], 32  //,,,
     RET
-.data
+
 .malloc_error_str:
 	.asciz	"Memory allocation failed in createNode! This might be an Operating System Issue! Terminating.\n"
 
