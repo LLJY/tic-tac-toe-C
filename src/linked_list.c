@@ -51,7 +51,7 @@ void printList(Node* head){
 }
 
 void destroyList(Node* head){
-    while(head->Prev != NULL){
+    while(head != NULL){
         Node* t = head;
         head = head->Prev;
         free(t);
