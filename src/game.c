@@ -243,7 +243,7 @@ void undo(){
         return;
     // allow the player to traverse back to an empty board, unless AI starts first.
     if(gameState.currentMove->Prev == NULL 
-    && gameState.currentMove->player != AI 
+    && gameState.turn != PLAYER_1 
     && gameState.player1StartFirst
     && gameState.opponent == AI){
         // empty the board
