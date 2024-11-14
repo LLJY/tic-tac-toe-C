@@ -13,6 +13,11 @@ extern void println(const char *format, ...);
 /// @brief Clears the terminal screen, will adapt to unix or windows.
 void clearScreen();
 
+/// @brief clears the input buffer, so that invalid inputs do not remain inside STDIN
+/// When entering an invalid input into scanf, it causes an invalid input to stay in STDIN
+/// because scanf errors out. Create a function to clear the input buffer upon errors.
+void clearInputBuffer();
+
 /// @brief Returns the maximum value of a or b
 /// @param a 
 /// @param b 

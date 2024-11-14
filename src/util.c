@@ -16,6 +16,11 @@ void clearScreen() {
     #endif
 }
 
+void clearInputBuffer(){
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
 /// @brief Returns the maximum value of a or b
 /// @param a 
 /// @param b 
