@@ -5,16 +5,16 @@
 
 void endGameUi(){
     if(gameState.isDraw){
-        println("Game Over! Draw!");
+        println(BOLD_CYAN"Game Over! Draw!"COLOUR_RESET);
         return;
     }
     if(gameState.opponent == PLAYER_2){
-        println("Game Over! Player %d has won!", gameState.winner + 1);
+        println(BOLD_GREEN"Game Over! Player %d has won!"COLOUR_RESET, gameState.winner + 1);
     }else if(gameState.opponent == AI){
         if(gameState.winner == PLAYER_1)
-            println("Game Over! You Win!");
+            println(BOLD_GREEN"Game Over! You Win!"COLOUR_RESET);
         else
-            println("Game Over! You lose!");
+            println(BOLD_RED"Game Over! You lose!"COLOUR_RESET);
     }
 }
 
@@ -44,7 +44,7 @@ PlayerType selectOpponentTypeUi(){
                 break;
             default:
                 valid_input = false;
-                println("Sorry, that input wasn't valid. Try again.");
+                println(BOLD_RED"Sorry, that input wasn't valid. Try again."COLOUR_RESET);
                 clearInputBuffer();
                 break;
         }
@@ -84,7 +84,7 @@ void selectMoveUi(){
         
         default:
             option1_valid = false;
-            println("Sorry, that input wasn't valid. Try again.");
+            println(BOLD_RED"Sorry, that input wasn't valid. Try again."COLOUR_RESET);
             clearInputBuffer();
             break;
         }
@@ -108,7 +108,7 @@ void selectMoveUi(){
             break;
         default:
             option1_valid = false;
-            println("Sorry, that input wasn't valid. Try again.");
+            println(BOLD_RED"Sorry, that input wasn't valid. Try again."COLOUR_RESET);
             clearInputBuffer();
             break;
         }
@@ -117,7 +117,7 @@ void selectMoveUi(){
     if(moveSuccess)
         nextTurn();
     else{
-        println("Move disallowed");
+        println(BOLD_RED"Move disallowed"COLOUR_RESET);
         selectMoveUi();
     }
 }
@@ -158,7 +158,7 @@ void refreshUi(){
                     character = 'O';
                     break;
                 default:
-                    println("Game has entered an illegal state! exiting...");
+                    println(BOLD_RED"Game has entered an illegal state! exiting..."COLOUR_RESET);
                     exit(1);
             }
             // Center the character within its space
@@ -211,7 +211,7 @@ void refreshUi(){
                 break;
             default:
                 option1_valid = false;
-                println("Sorry, that input wasn't valid. Try again.");
+                println(BOLD_RED"Sorry, that input wasn't valid. Try again."COLOUR_RESET);
                 clearInputBuffer();
                 break;
             }

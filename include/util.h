@@ -4,11 +4,18 @@
 #ifndef U_H
 #define U_H
 
+// add definitions for pretty text colour
+#define BOLD_RED     "\033[1m\033[31m"
+#define BOLD_GREEN   "\033[1m\033[32m"
+#define BOLD_CYAN    "\033[1m\033[36m"
+#define COLOUR_RESET   "\033[0m"
+
 /// @brief println works exactly like printf except it adds a newline
 /// This should avoid situations where you forget to print a newline.
 /// @param format 
 /// @param  
 extern void println(const char *format, ...);
+
 
 /// @brief Clears the terminal screen, will adapt to unix or windows.
 void clearScreen();
