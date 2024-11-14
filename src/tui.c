@@ -70,6 +70,8 @@ PlayerType selectOpponentTypeUi(){
                 break;
             default:
                 valid_input = false;
+                println("Sorry, that input wasn't valid. Try again.");
+                clearInputBuffer();
                 break;
         }
     }
@@ -108,6 +110,8 @@ void selectMoveUi(){
         
         default:
             option1_valid = false;
+            println("Sorry, that input wasn't valid. Try again.");
+            clearInputBuffer();
             break;
         }
 
@@ -130,6 +134,8 @@ void selectMoveUi(){
             break;
         default:
             option1_valid = false;
+            println("Sorry, that input wasn't valid. Try again.");
+            clearInputBuffer();
             break;
         }
     }
@@ -231,6 +237,8 @@ void refreshUi(){
                 break;
             default:
                 option1_valid = false;
+                println("Sorry, that input wasn't valid. Try again.");
+                clearInputBuffer();
                 break;
             }
         }
