@@ -249,7 +249,7 @@ void undo(){
         // empty the board
         for (int i = 0; i < 3; i++)
         {
-            for (int j = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
             {
                 gameState.board[i][j] = BOARD_EMPTY;
             }   
@@ -262,7 +262,7 @@ void undo(){
         // empty the board
         for (int i = 0; i < 3; i++)
         {
-            for (int j = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
             {
                 gameState.board[i][j] = BOARD_EMPTY;
             }   
