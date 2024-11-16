@@ -87,7 +87,21 @@ void play_sound(const char *sound_file, bool isRepeat)
 {
     // Create a GStreamer pipeline for playing the sound file
     char pipeline_string[256];
-    sprintf(pipeline_string, "playbin uri=file://%s/%s", g_get_current_dir(), sound_file);
+    char *current_dir = g_get_current_dir();
+
+    // handle backslashes on windows
+
+    for(int i = 0;  i < 256; i++){
+        if(current_dir[i] == '\0')
+            break; // break when we hit the null terminator of the string
+        
+        if(current_dir[i] == '\\'){
+            current_dir[i] = '/';
+        }
+    }
+    
+    sprintf(pipeline_string, "playbin uri=file:///%s/%s", current_dir, sound_file);
+    printf(pipeline_string);
     GstElement *pipeline = gst_parse_launch(pipeline_string, NULL);
     if (pipeline == NULL)
     {
