@@ -101,7 +101,6 @@ void play_sound(const char *sound_file, bool isRepeat)
     }
     
     sprintf(pipeline_string, "playbin uri=file:///%s/%s", current_dir, sound_file);
-    printf(pipeline_string);
     GstElement *pipeline = gst_parse_launch(pipeline_string, NULL);
     if (pipeline == NULL)
     {
