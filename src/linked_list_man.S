@@ -156,14 +156,14 @@ destroyList:
     mov  x29, sp
     str  x19, [sp, 16]
 
-    MOV X20, X0
+    MOV X19, X0
     while:
-        MOV X0, X20 // t = head;
-        LDR X20, [X20, 24] // load node-> next
+        MOV X0, X19 // t = head;
+        LDR X19, [X19, 24] // load node-> next
 
         BL free // free t
         
-        CBZ X20, end_while // branch to end when X20 is a nullptr
+        CBZ X19, end_while // branch to end when X19 is a nullptr
         B while
     end_while:
 
