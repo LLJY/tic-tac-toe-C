@@ -102,9 +102,6 @@ insertNodeHead:
     STR X2, [X1, 24] //node -> prev = *head
     STR XZR, [X1, 16] // node -> next = null
 
-    //My GCC Reference addds this extra load instruction which i think is redundant
-    // 	ldr	x2, [x0]	// _2, *head_4(D)
-    
     STR X1, [X2, 16] // *head->next = node
     STR X1, [X0] // *head = node
     RET
@@ -116,9 +113,6 @@ insertNodeTail:
     STR X2, [X1, 16] //node -> next = *tail
     STR XZR, [X1, 24] // node -> prev = null
 
-    //My GCC Reference addds this extra load instruction which i think is redundant
-    // 	ldr	x2, [x0]	// _2, *head_4(D)
-    
     STR X1, [X2, 24] // *tail->prev = node
     STR X1, [X0] // *tail = node
     RET
