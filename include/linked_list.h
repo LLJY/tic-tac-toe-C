@@ -30,10 +30,14 @@ extern void insertNodeHead(Node** head, Node* node);
 /// @param node value of new node, can be created with createNode()
 extern void insertNodeTail(Node** tail, Node* node);
 
-/// @brief Frees the memory from the linked list.
-/// @param head top of the list.
+/// @brief Prints the row item of every single item in the linked-list.
+/// Uses nullptr as a list terminator.
+/// Used for stress testing the linked-list.
+/// @param head the head node of the list.
 extern void printList(Node* head);
 
+/// @brief Frees the memory from the linked list.
+/// @param head top of the list.
 extern void destroyList(Node* head);
 
 #endif

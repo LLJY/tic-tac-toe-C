@@ -23,6 +23,9 @@
 
 #endif
 
+/// @brief Player type is the definition for player in integers
+/// It removes magic numbers from the code and makes it clearer which player is which.
+/// it is mainly used for game logic to determine the current player and opponent.
 typedef enum PlayerType{
     PLAYER_1 = 0,
     PLAYER_2 = 1,
@@ -30,8 +33,12 @@ typedef enum PlayerType{
     UNASSIGNED = -99
 }PlayerType;
 
+// Empty definition for the ttt board.
 #define BOARD_EMPTY 0
+// Cross (X) definition for the ttt board.
 #define BOARD_CROSS 1
+// Nought (O) definition for the ttt board.
 #define BOARD_NOUGHT 2
+// Global variable to store the maximum minimax depth, affects difficulty.
 extern int MAX_DEPTH;
 #endif

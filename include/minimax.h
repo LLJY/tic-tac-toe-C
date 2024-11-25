@@ -5,6 +5,8 @@
 #ifndef MM_H
 #define MM_H
 
+/// @brief Simple Pair struct to return the row and column from findBestMove.
+/// This gives us a good generic datastructure to be re-used for other functions like findBestDLMove
 typedef struct Pair {
     int a;
     int b;
@@ -22,9 +24,9 @@ int evaluateBoard(int board[3][3], bool playerStartFirst);
 /// @return The best score the current player can get
 int minimax(int board[3][3], int depth, bool isMaximizing, PlayerType currentPlayer, bool playerStartFirst);
 
-/// @brief Figures out the best move for the AI.
+/// @brief Figures out the best move using minimax AI.
 /// @param board The tic-tac-toe board.
-/// @return The best move the AI can make.
+/// @return The best move the minimax AI can make.
 Pair findBestMove(int board[3][3], PlayerType currentPlayer, bool playerStartFirst);
 
 /// @brief Checks if there are any empty spots left on the board
