@@ -213,21 +213,22 @@ static void mode_combo_box_changed(GtkWidget *widget, gpointer data)
     int mode = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
     // Enable or disable the difficulty combo box based on the selected mode
-    gtk_widget_set_sensitive(difficulty_combo_box, mode == 0 || mode == 2);
 
     switch (mode)
     {
-    case 0:
-        opponent = AI;
-        aiIsDeepLearning = false;
-        break;
-    case 1:
-        opponent = PLAYER_2;
-        break;
-    case 2:
-        opponent = AI;
-        aiIsDeepLearning = true;
-        break;
+        case 0:
+            opponent = AI;
+            aiIsDeepLearning = false;
+            gtk_widget_set_sensitive(difficulty_combo_box, true);
+            break;
+        case 1:
+            opponent = PLAYER_2;
+            break;
+        case 2:
+            opponent = AI;
+            aiIsDeepLearning = true;
+            gtk_widget_set_sensitive(difficulty_combo_box, false);
+            break;
     }
 }
 
