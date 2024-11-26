@@ -1,9 +1,9 @@
 #include <include/minimax.h>
 #include <include/definitions.h>
 // set max depth default value here, but it can be modified by tui.c and gui.c
-int MAX_DEPTH = 3;
+int MAX_DEPTH = 2;
 
-int evaluateBoard(int board[3][3], bool playerStartFirst)
+int evaluateBoard(int board[3][3])
 {
     // Check rows
     for (int i = 0; i < 3; i++)
@@ -42,9 +42,9 @@ int evaluateBoard(int board[3][3], bool playerStartFirst)
     return 0; // No winner yet
 }
 
-int minimax(int board[3][3], int depth, bool isMaximizing, PlayerType currentPlayer, bool playerStartFirst)
+int minimax(int board[3][3], int depth, bool isMaximizing, PlayerType currentPlayer)
 {
-    int score = evaluateBoard(board, playerStartFirst);
+    int score = evaluateBoard(board);
 
     if (score == 10)
     {
@@ -71,7 +71,7 @@ int minimax(int board[3][3], int depth, bool isMaximizing, PlayerType currentPla
                 {
                     board[i][j] = (currentPlayer == PLAYER_1) ? 1 : 2; // AI's symbol
                     best = max(best, minimax(board, depth + 1, !isMaximizing,
-                                             (currentPlayer == PLAYER_1) ? AI : PLAYER_1, MAX_DEPTH));
+                                             (currentPlayer == PLAYER_1) ? AI : PLAYER_1));
                     board[i][j] = 0;
                 }
             }
@@ -89,7 +89,7 @@ int minimax(int board[3][3], int depth, bool isMaximizing, PlayerType currentPla
                 {
                     board[i][j] = (currentPlayer == PLAYER_1) ? 1 : 2; // Human's symbol
                     best = min(best, minimax(board, depth + 1, !isMaximizing,
-                                             (currentPlayer == PLAYER_1) ? AI : PLAYER_1, MAX_DEPTH));
+                                             (currentPlayer == PLAYER_1) ? AI : PLAYER_1));
                     board[i][j] = 0;
                 }
             }
@@ -105,8 +105,21 @@ Pair findBestMove(int board[3][3], PlayerType currentPlayer, bool playerStartFir
     bestMove.a = -1;
     bestMove.b = -1;
 
-    bool isMaximizing = !playerStartFirst;
-    bestVal = isMaximizing ? 1000 : -1000;
+    bool isMaximizing = false;
+
+    if(!playerStartFirst){
+        // convert the board state to something understandable by minimax
+        // minimax only sees 1 as player and 2 as AI, so just change it as such.
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if(board[i][j] != BOARD_EMPTY){
+                    board[i][j] = board[i][j] == BOARD_NOUGHT ? 1 : 2;
+                }
+            }
+        }
+    }
 
     for (int i = 0; i < 3; i++)
     {
@@ -115,10 +128,10 @@ Pair findBestMove(int board[3][3], PlayerType currentPlayer, bool playerStartFir
             if (board[i][j] == 0)
             {
                 board[i][j] = (currentPlayer == PLAYER_1) ? 2 : 1; // AI's symbol
-                int moveVal = minimax(board, 0, isMaximizing, (currentPlayer == PLAYER_1) ? AI : PLAYER_1, MAX_DEPTH);
+                int moveVal = minimax(board, 0, isMaximizing, (currentPlayer == PLAYER_1) ? AI : PLAYER_1);
                 board[i][j] = 0;
 
-                if ((!isMaximizing && moveVal > bestVal) || (isMaximizing && moveVal < bestVal))
+                if (moveVal > bestVal)
                 {
                     bestMove.a = i;
                     bestMove.b = j;
