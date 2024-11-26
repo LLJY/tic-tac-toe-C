@@ -15,14 +15,14 @@ typedef struct Pair {
 /// @brief Checks the board and returns a score.
 /// @param board The tic-tac-toe board.
 /// @return 10 if AI wins -10 if player wins, 0 otherwise
-int evaluateBoard(int board[3][3], bool playerStartFirst);
+int evaluateBoard(int board[3][3]);
 
 /// @brief The minimax function (recursive).
 /// @param board The tic-tac-toe board.
 /// @param depth How deep we are in the search
 /// @param isMaximizing True if it's the AI's turn, false if it's the player's turn.
 /// @return The best score the current player can get
-int minimax(int board[3][3], int depth, bool isMaximizing, PlayerType currentPlayer, bool playerStartFirst);
+int minimax(int board[3][3], int depth, bool isMaximizing, PlayerType currentPlayer);
 
 /// @brief Figures out the best move using minimax AI.
 /// @param board The tic-tac-toe board.
