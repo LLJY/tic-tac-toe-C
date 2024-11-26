@@ -240,7 +240,7 @@ static void difficulty_combo_box_changed(GtkWidget *widget, gpointer data)
     // Set the maxDepth for the minimax algorithm based on the selected difficulty
 
     if (difficulty == 0)
-        MAX_DEPTH = 2;
+        MAX_DEPTH = 1;
     else
         MAX_DEPTH = 9;
 }

@@ -55,7 +55,7 @@ int minimax(int board[3][3], int depth, bool isMaximizing, PlayerType currentPla
         return score + depth; // Player B (AI) wins (maximize depth)
     }
 
-    if (!isMovesLeft(board) || depth > MAX_DEPTH)
+    if (!isMovesLeft(board) || depth >= MAX_DEPTH)
     {
         return 0; // Draw
     }
